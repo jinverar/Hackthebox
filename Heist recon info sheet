@@ -30,7 +30,32 @@ Info- Sheet
 Services and ports:
 
 ```
-INSERTTCPSCAN
+========
+
+host          port   proto  name           state     info
+----          ----   -----  ----           -----     ----
+10.10.10.149  21     tcp    ftp            filtered  
+10.10.10.149  22     tcp    ssh            filtered  
+10.10.10.149  23     tcp    telnet         filtered  
+10.10.10.149  25     tcp    smtp           filtered  
+10.10.10.149  53     tcp    domain         filtered  
+10.10.10.149  80     tcp    http           open      Microsoft IIS httpd 10.0
+10.10.10.149  110    tcp    pop3           filtered  
+10.10.10.149  111    tcp    rpcbind        filtered  
+10.10.10.149  135    tcp    msrpc          open      Microsoft Windows RPC
+10.10.10.149  139    tcp    netbios-ssn    filtered  
+10.10.10.149  143    tcp    imap           filtered  
+10.10.10.149  443    tcp    https          filtered  
+10.10.10.149  445    tcp    microsoft-ds   open      
+10.10.10.149  993    tcp    imaps          filtered  
+10.10.10.149  995    tcp    pop3s          filtered  
+10.10.10.149  1723   tcp    pptp           filtered  
+10.10.10.149  3306   tcp    mysql          filtered  
+10.10.10.149  3389   tcp    ms-wbt-server  filtered  
+10.10.10.149  5900   tcp    vnc            filtered  
+10.10.10.149  5985   tcp    wsman          open      Microsoft HTTPAPI httpd 2.0 SSDP/UPnP
+10.10.10.149  8080   tcp    http-proxy     filtered  
+10.10.10.149  49668  tcp    msrpc          open      Microsoft Windows RPC
 ```
 
 
@@ -59,9 +84,18 @@ find&replace *dollar-sign* with /*dollar-sign* or find a way to escape the real 
 
 Username:password -
 
-Usernames found -
+Usernames found - Guset, Hazard, Suport Admin
 
-Passwords found -
+Passwords found - within cisco router config found at the following domain
+
+http://10.10.10.149:80/login.php?guest=true
+
+username rout3r password 7 0242114B0E143F015F5D1E161713
+
+$uperP@ssword
+
+username admin privilege 15 password 7 02375012182C1A1D751618034F36415408
+Q4)sJu\Y8qz*A3?d
 
 ```
 
@@ -864,6 +898,9 @@ ls -lh /usr/share/nmap/scripts/*smb*
 ### NBTSCAN
 
 Nbtscan -r 10.10.10.149/24
+
+!!!!!! I GOT TO HERE AND LEFT OFF !!!
+
 
 ### Port 21 - FTP
 
